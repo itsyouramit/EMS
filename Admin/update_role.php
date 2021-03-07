@@ -1,31 +1,39 @@
-<?php
+
+<?php 
+
 session_start();
 include_once "db_connection.php";
 include_once "function.php";
 
 
 
+$id = $_GET['id'];
+$all_role=all_role($conn,"SELECT * FROM department_role_table WHERE id = '$id'");
 
-if (isset($_POST["submit"])) {
+
+if (isset($_POST['update'])) {
 
     $role = $_POST["role"];
-
     $error=validate_role($conn);
-    
 
    if(sizeOf($error) <= 0){
-
-        $q1 = "INSERT INTO department_role_table (role) VALUES ('$role')";
-        $q2 = mysqli_query($conn,$q1);
-        if ($q2) {
-            echo "<script>alert('Role Added Sucessfully')</script>";
+    
+        $update_dep = mysqli_query($conn,"UPDATE department_role_table SET role = '".$_POST["role"]."' WHERE id = '$id' ");
+        if ($update_dep) {
+            echo "<script>alert('Role Updated Successfully')</script>";
+        }else{
+            echo "<script>alert('Failed to Update')</script>";
         }
     }else{
         echo $error[]="Error".mysqli_error($conn);
     }
 }
 
+
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,11 +75,11 @@ if (isset($_POST["submit"])) {
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="small mb-1" for="inputFirstName">Role Name</label>
-                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="role" />
+                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="role" value="<?php echo $all_role['role'];?>"/>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="submit" name="submit" value="Add Department" class="btn btn-primary btn-block">
+                                                <input type="submit" name="update" value="Add Department" class="btn btn-primary btn-block">
                                                 
                                             </form>
 

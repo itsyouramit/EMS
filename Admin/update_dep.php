@@ -1,29 +1,32 @@
-<?php
+<?php 
 session_start();
 include_once "db_connection.php";
 include_once "function.php";
 
 
 
+$id = $_GET['id'];
+$all_dep=all_dep($conn,"SELECT * FROM department_table WHERE id = '$id'");
 
-if (isset($_POST["submit"])) {
 
-    $role = $_POST["role"];
+if (isset($_POST['update'])) {
 
-    $error=validate_role($conn);
-    
+    $department = $_POST["department"];
+    $error=validate_dep($conn);
 
    if(sizeOf($error) <= 0){
-
-        $q1 = "INSERT INTO department_role_table (role) VALUES ('$role')";
-        $q2 = mysqli_query($conn,$q1);
-        if ($q2) {
-            echo "<script>alert('Role Added Sucessfully')</script>";
+   	
+       	$update_dep = mysqli_query($conn,"UPDATE department_table SET department = '".$_POST["department"]."' WHERE id = '$id' ");
+        if ($update_dep) {
+            echo "<script>alert('department updated successfully')</script>";
+        }else{
+        	echo "<script>alert('failed to update')</script>";
         }
     }else{
         echo $error[]="Error".mysqli_error($conn);
     }
 }
+
 
 ?>
 
@@ -51,37 +54,39 @@ if (isset($_POST["submit"])) {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align: center;">Add New Department Role</h1>
+                        <h1 class="mt-4" style="text-align: center;">Update Department</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">ADD ROLE</li>
+                            <li class="breadcrumb-item active">UPDATE DEPARTMENT</li>
                         </ol>
 
                         <div class="container" style="margin-top: -40px;">
                             <div class="row justify-content-center">
                                 <div class="col-lg-7">
                                     <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Add New Department Role</h3></div>
+                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Department</h3></div>
                                         <div class="card-body">
                                             <form method="POST">
                                                 <div class="form-row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="small mb-1" for="inputFirstName">Role Name</label>
-                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="role" />
+                                                            <label class="small mb-1" for="inputFirstName">Department Name</label>
+                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="department" value="<?php echo $all_dep['department'];?>" />
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="submit" name="submit" value="Add Department" class="btn btn-primary btn-block">
+                                                <input type="submit" name="update" value="Add Department" class="btn btn-primary btn-block">
                                                 
                                             </form>
 
-                                    <?php if(isset($error) && sizeof($error)>0) {?>
-                                        <div class="error">
-                                            <?php foreach($error as $error_msg) {
-                                                echo $error_msg."<br>"; ?>
+                                            <?php if(isset($error) && sizeof($error) >0){?>
+
+                                            	<div class="error">
+                                            		<?php foreach($error as $error_msg){ ?>
+                                            			<?php echo $error_msg; ?>
+                                            		<?php }?>
+                                            	</div>
                                             <?php } ?>
-                                        </div>
-                                    <?php } ?>
+
 
                                         </div>
                                     </div>
@@ -107,3 +112,4 @@ if (isset($_POST["submit"])) {
         <script src="assets/demo/datatables-demo.js"></script>
     </body>
 </html>
+

@@ -1,5 +1,6 @@
 <?php
-session_start();
+error_reporting(0);
+
 ?>
 
 <div id="layoutSidenav_nav">
@@ -22,7 +23,12 @@ session_start();
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="all_department.php">See All</a>
-                        <a class="nav-link" href="new_department.php">Create New</a>
+
+                        <?php if($_SESSION["ROLE"] == 1){ ?>
+                            <a class="nav-link" href="add_department.php">Create New</a>
+                        <?php } ?>
+
+                        
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -36,7 +42,12 @@ session_start();
                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                         <a class="nav-link" href="department_role.php">Department Role</a>
-                        <a class="nav-link" href="new_role.php">Create New Role</a>
+
+                        <?php if($_SESSION["ROLE"] == 1){ ?>
+                            <a class="nav-link" href="new_role.php">Create New Role</a>
+                        <?php } ?>
+
+                        
 
                     <!--    
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
@@ -64,22 +75,28 @@ session_start();
                             </nav>
                         </div>    
                     -->
+
                     </nav>
                 </div>
 
-                <?php if ($_SESSION["ROLE"] == 1) { ?>
-                    # code...
+                
                 
                 <div class="sb-sidenav-menu-heading">Admin</div>
-                <a class="nav-link" href="create_emp.php">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Create New Employee
-                </a>
-                <a class="nav-link" href="table.php">
+
+                <?php if($_SESSION["ROLE"] == 1){ ?>
+                    <a class="nav-link" href="create_emp.php">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Create New Employee
+                    </a>
+                <?php } ?>
+
+
+
+                <a class="nav-link" href="all_emp.php">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Table
                 </a>
-                <?php } ?>
+
 
             </div>
         </div>

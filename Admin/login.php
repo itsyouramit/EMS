@@ -1,51 +1,48 @@
 <?php  
-include_once "db_connection.php";
-?>
-
-<?php
 session_start();
-
-$_SESSION["loginstatus"]="";
+include_once "db_connection.php";
 
 if (isset($_POST["login"])) {
     
     $email = $_POST["email"];
     $pass  = $_POST["password"];
 
-    if (!empty($email) && !empty($pass)) 
-    {
-     $useremail = mysqli_escape_string($conn, $email);  
-     $userpass  = mysqli_escape_string($conn, $pass);
+   
+    $q1 = "SELECT * FROM admin WHERE email='$email' AND password='$pass'";
+    $q2 = mysqli_query($conn,$q1);
+    $count = mysqli_num_rows($q2);
 
-     $q1 = "SELECT * FROM admin WHERE email = '".$useremail."' and password = '".$userpass."'";
+    if ($count>0) {
+        $data = mysqli_fetch_assoc($q2);
 
-     $res = mysqli_query($conn,$q1);
-     $count = mysqli_num_rows($res);
-    
-     
-     if ($count>0) {
-        $rows = mysqli_fetch_assoc($res);
+        if ($data) {
+            $_SESSION["ROLE"] = $data["role"];
+            $_SESSION["IS_LOGIN"] = "Yes";
 
-        $_SESSION["ROLE"] = $rows["role"];
-        $_SESSION["IS_LOGIN"] = "yes";
-        if ($rows["role"] == 1) {
-            header("location:index2.php");
-            die();
-        }elseif ($rows["role"] == 2) {
-            header("location:base.php");
-            die();
-        }else{
-            header("location:index2.php");
-            die();
+            if (!empty($_POST["remember"])) {
+                setcookie("email",$email, time() + 3600 );
+                setcookie("password",$pass, time() + 3600 );
+                echo '<script>alert("email and password saved sucessfully")</script>';
+            }
+
+            if ($data["role"] == 1) {
+                header("location:index.php");
+                die();
+            }else{
+                header("location:index.php");
+                die();
+            }
         }
-
-        // print_r($rows);
-        // die();
-
-     }else{
+    }
+    else{
         echo "Invalid Creditantials";
-     }
+    }
+}
 
+        // $useremail = mysqli_escape_string($conn, $email);  
+        // $userpass  = mysqli_escape_string($conn, $pass);
+
+        //  anadipandey37@gmail.com
      
      // if ($rows) 
      //    {
@@ -70,9 +67,6 @@ if (isset($_POST["login"])) {
      //    $message = "Invalid Creditantials";
      //    echo $message;
      //  }
-
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +101,8 @@ if (isset($_POST["login"])) {
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputPassword">Password</label>
-                                                <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" name="password" />
+                                                <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" name="password" 
+                                               value="<?php if(isset($_COOKIE["password"])) {echo $_COOKIE["password"];}?>"/>
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">

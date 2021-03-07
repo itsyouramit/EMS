@@ -5,20 +5,18 @@ include_once "function.php";
 
 
 
-
 if (isset($_POST["submit"])) {
 
-    $role = $_POST["role"];
+    $department = $_POST["department"];
 
-    $error=validate_role($conn);
-    
+    $error=validate_dep($conn);
 
    if(sizeOf($error) <= 0){
 
-        $q1 = "INSERT INTO department_role_table (role) VALUES ('$role')";
+        $q1 = "INSERT INTO department_table (department) VALUES ('$department')";
         $q2 = mysqli_query($conn,$q1);
         if ($q2) {
-            echo "<script>alert('Role Added Sucessfully')</script>";
+            echo "<script>alert('department created sucessfully')</script>";
         }
     }else{
         echo $error[]="Error".mysqli_error($conn);
@@ -51,30 +49,33 @@ if (isset($_POST["submit"])) {
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4" style="text-align: center;">Add New Department Role</h1>
+                        <h1 class="mt-4" style="text-align: center;">Add New Department</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">ADD ROLE</li>
+                            <li class="breadcrumb-item active">ADD DEPARTMENT</li>
                         </ol>
 
                         <div class="container" style="margin-top: -40px;">
                             <div class="row justify-content-center">
                                 <div class="col-lg-7">
+
+
+
+
                                     <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Add New Department Role</h3></div>
+                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Add New Department</h3></div>
                                         <div class="card-body">
                                             <form method="POST">
                                                 <div class="form-row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="small mb-1" for="inputFirstName">Role Name</label>
-                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="role" />
+                                                            <label class="small mb-1" for="inputFirstName">Department Name</label>
+                                                            <input class="form-control py-3" id="inputFirstName" type="text" placeholder="Enter Department Name" name="department" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <input type="submit" name="submit" value="Add Department" class="btn btn-primary btn-block">
                                                 
                                             </form>
-
                                     <?php if(isset($error) && sizeof($error)>0) {?>
                                         <div class="error">
                                             <?php foreach($error as $error_msg) {
@@ -84,6 +85,7 @@ if (isset($_POST["submit"])) {
                                     <?php } ?>
 
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
